@@ -1,0 +1,82 @@
+<!DOCTYPE>
+<html ng-app="myApp">
+<head>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+
+	<title>Gestion de contact</title>
+</head>
+<body>
+
+	<div class="container" ng-controller="AppCtrl">
+		<h1 class="text-center">Listes des contacts</h1>
+    <form name="personForm">
+        <div class="form-group" ng-class="{ 'has-error' : personForm.nom.$invalid && !personForm.nom.$pristine }">
+			<label>Nom</label>
+			<input type="text" name="nom" class="form-control" ng-model="contact.nom" required ng-minlength="3">
+        <p ng-show="personForm.nom.$invalid && !personForm.nom.$pristine" class="help-block">Le nom est requis</p>
+    </div>
+    <div class="form-group" ng-class="{ 'has-error' : personForm.prenom.$invalid && !personForm.prenom.$pristine }">
+        <label>Prenom</label>
+        <input type="text" name="prenom" class="form-control" ng-model="contact.pnom" ng-minlength="3" ng-maxlength="8" placeholder="Entrer le prénom">
+        <p ng-show="personForm.prenom.$error.minlength" class="help-block">Le prénom est trop court.</p>
+        <p ng-show="personForm.prenom.$error.maxlength" class="help-block">Le prénom est trop long.</p>
+    </div>
+    <div class="form-group" ng-class="{ 'has-error' : personForm.email.$invalid && !personForm.email.$pristine }">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" ng-model="contact.email">
+        <p ng-show="personForm.email.$invalid && !personForm.email.$pristine" class="help-block">Enter une adresse mail valid.</p>
+    </div>
+    <div class="form-group" ng-class="{ 'has-error' : personForm.num.$invalid && !personForm.num.$pristine }">
+        <label>Telephone</label>
+        <input type="number" name="num" class="form-control" ng-model="contact.num" ng-minlength="8">
+        <p ng-show="personForm.num.$invalid && !personForm.num.$pristine" class="help-block">Veuillez saisir un numéro de telephone correct.</p>
+    </div>
+    </form>			
+	
+	<button class="btn btn-primary" ng-click="addContact()">Nouveau Contact</button>
+	<button class="btn btn-info" ng-click="update()">Mettre a jour</button>
+		<br>
+		<br>
+		<div class="spacer input-group">
+			<div class="input-group-addon">
+				<span class="glyphicon glyphicon-search"></span>
+			</div>
+			<input type="text" ng-model="recherche" class="form-control" placeholder="Rechercher un contact ....."/>
+		</div>
+		<br>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+					<a ng-click="triContact('nom')">Nom</a>
+					<span class="hSpacer" ng-class="cssTri('nom')"></span>
+					</th>					
+					<th>
+					<a ng-click="triContact('pnom')">Prénom</a>
+					<span class="hSpacer" ng-class="cssTri('pnom')"></span>
+					</th>
+					<th>Email</th>
+					<th>Numéro</th>
+					<th>Action</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>		
+				<tr ng-repeat="contact in pfebase |filter:recherche| orderBy:champTri:triDescendant"">
+					<td>{{contact.nom}}</td>
+					<td>{{contact.pnom}}</td>
+					<td>{{contact.email}}</td>
+					<td>{{contact.num}}</td>
+					<td><button class="btn btn-danger" ng-click="remove(contact._id)">Effacer contact</button></td>
+					<td><button class="btn btn-warning" ng-click="edit(contact._id)">Modifier contact</button></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+<script src="angular/angular.min.js"></script>
+<script src="controllers/controller.js"></script>
+</body>
+</html>
